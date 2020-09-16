@@ -24,7 +24,7 @@
 3. ##### Run Project
    \*`docker-compose up`
 
-###after completed all steps above, jus click in the link
+### after completed all steps above, jus click in the link
 [API REST Adonis](http://api.rest.adonis:3334)
 
 
