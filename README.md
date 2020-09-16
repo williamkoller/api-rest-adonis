@@ -7,7 +7,7 @@
 
 <!-- > update /etc/hosts -->
 
-###Configuring /etc/hosts file
+### Configuring /etc/hosts file
 
 1. open file
    - ` sudo nano /etc/hosts` or `sudo vim /etc/hosts`
@@ -54,5 +54,4 @@
 - running adonis migration refresh and seed command
   `docker-compose exec api adonis migration:refresh --seed `
 
--running adonis test for a specific file
-`docker-compose -f docker-compose.test.yml run api adonis test --files <filename>`
+
