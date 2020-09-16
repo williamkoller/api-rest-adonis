@@ -1,13 +1,40 @@
-version: '3'
+version: '3.2'
 services:
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_USER=william
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=api-rest-adonis
-      - TZ=GMT
+  api: 
+    build: .
+    environment: 
+      ENV_SILENT: "true"
+      DB_CONNECTION: "pg"
+      DB_DATABASE: "api-rest-adonis"
+      DB_USER: "william"
+      DB_PASSWORD: "root"
+      DB_PORT: "5432"
+      DB_HOST: 'db'
+
+      NODE_ENV: 'development'
+
+      HOST: '0.0.0.0'
+      PORT: '3334'
     volumes:
-      - "./db-posgres/postgres:/var/lib/postgresql/data"
+      - .:/app
+      - /app/node_modules
     ports:
-      - 5432:5432
+      - '3334:3334'
+    networks:
+      - default
+    depends_on:
+      - db
+    links:
+      - db:db  
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: "william"
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: "api-rest-adonis"
+      TZ: "GMT"
+    volumes:
+      - "./db-postgres/postgres:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+  
