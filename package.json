@@ -5,8 +5,10 @@
   "description": "Adonisjs boilerplate for API server with pre-configured JWT",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "node ace test"
+    "start": "ENV_SILENT=true  node server.js",
+    "test": "node ace test",
+    "pretest": "./node_modules/.bin/eslint  . --fix",
+    "docker:test": "docker-compose  up --build --exit-code-from cypress"
   },
   "keywords": [
     "adonisjs",
