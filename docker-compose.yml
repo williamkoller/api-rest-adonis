@@ -2,6 +2,7 @@ version: '3.2'
 services:
   api: 
     build: .
+    command: sh ./docker-start.sh
     environment: 
       ENV_SILENT: "true"
       DB_CONNECTION: "pg"
