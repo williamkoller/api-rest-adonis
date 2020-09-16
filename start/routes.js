@@ -20,3 +20,4 @@ Route.post('/register', 'AuthController.register')
 Route.post('/authenticate', 'AuthController.authenticate')
 
 Route.group(() => { Route.resource('tweets', 'TweetController').apiOnly().except('update') }).middleware('auth')
+Route.group(() => { Route.resource('products', 'ProductController').apiOnly().except('update') }).middleware('auth')
