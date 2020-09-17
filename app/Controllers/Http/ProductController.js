@@ -21,12 +21,16 @@ class ProductController {
    */
   async index({ auth }) {
     const products = await Product.query().setHidden(['created_at', 'updated_at', 'user_id'])
-      .where('id', auth.user.id)
+      .where('user_id', auth.user.id)
       .with('user', (builder) =>
         builder.select(['id', 'username', 'email'])
-      )
-      .first()
-    return { products }
+      ).fetch()
+      .then((users) => users.toJSON())
+
+    return {
+      products: products,
+      users: `same user: ${!!delete products[0].user}`
+    }
   }
 
   /**
