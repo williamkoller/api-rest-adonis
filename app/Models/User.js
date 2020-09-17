@@ -35,9 +35,6 @@ class User extends Model {
     return this.hasMany('App/Models/Token')
   }
 
-  tweets () {
-    return this.hasMany('App/Models/Tweet')
-  }
 }
 
 module.exports = User

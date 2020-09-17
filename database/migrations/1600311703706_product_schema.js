@@ -5,11 +5,12 @@ const Schema = use('Schema')
 
 class ProductSchema extends Schema {
   up() {
-    this.create('products', (table) => {
-      table.increments()
-      table.string('name', 240).notNullable()
-      table.float('price', 2).notNullable()
-      table.string('type', 240).notNullable()
+    this.create('products', (table, longtext) => {
+      table.string('name', 255).notNullable()
+      table.text('description', [longtext]).notNullable()
+      table.text('infos', [longtext]).notNullable()
+      table.float('code', 8, 2).notNullable()
+      table.float('price', 8, 2).notNullable()
       table
         .integer('user_id')
         .unsigned()
@@ -18,6 +19,7 @@ class ProductSchema extends Schema {
         .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
+      table.increments()
       table.timestamps()
     })
   }

@@ -4,7 +4,6 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-
 const Product = use('App/Models/Product')
 
 /**
@@ -21,29 +20,27 @@ class ProductController {
    * @param {View} ctx.view
    */
   async index({ auth }) {
-    const products = await Product.query()
-      .setHidden(['created_at', 'updated_at', 'user_id'])
+    const products = await Product.query().setHidden(['created_at', 'updated_at', 'user_id'])
       .where('id', auth.user.id)
       .with('user', (builder) =>
-        builder.select('id', 'username')
+        builder.select(['id', 'username', 'email'])
       )
       .first()
-    return products
+    return { products }
   }
 
   /**
-   * Create/save a new product.
-   * POST products
+   * Render a form to be used for creating a new product.
+   * GET products/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
+   * @param {View} ctx.view
    */
-  async store({ request, auth }) {
-    const data = await request.only(['name', 'price', 'type'])
-    const product = await Product
-      .create({ user_id: auth.user.id, ...data })
-
+  async create({ request, auth }) {
+    const data = request.only(['name', 'description', 'infos', 'code', 'price'])
+    const product = await Product.create({ user_id: auth.user.id, ...data })
     return product
   }
 
@@ -56,20 +53,9 @@ class ProductController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show({ params }) {
+  async findById({ params }) {
     const product = await Product.findOrFail(params.id)
     return product
-  }
-
-  /**
-   * Update product details.
-   * PUT or PATCH products/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update({ params, request, response }) {
   }
 
   /**
@@ -80,7 +66,12 @@ class ProductController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {
+  async destroy({ params, auth, response }) {
+    const product = await Product.findOrFail(params.id)
+    if (product.user_id !== auth.user.id) {
+      return response.status(401)
+    }
+    await product.delete()
   }
 }
 
